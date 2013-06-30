@@ -9,6 +9,9 @@
 #include <G35String.h>
 #include <StockPrograms.h>
 
+#include <Wire.h>
+#include <Adafruit_RGBLCDShield.h>
+
 // Total # of lights on string (usually 50, 48, or 36). Maximum is 63, because
 // the protocol uses 6-bit addressing and bulb #63 is reserved for broadcast
 // messages.
@@ -17,16 +20,75 @@
 // Arduino pin number. Pin 13 will blink the on-board LED.
 #define G35_PIN (9)
 
+#define BUTTON_PIN (7)
+
+#define BACKLIGHT_MILLIS (10000)
+#define ON (0x1)
+#define OFF (0x0)
+
+Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
+
 G35String lights(G35_PIN, LIGHT_COUNT);
-LightProgram* programs[] = { new ChasingWhiteRedBlue(lights) };
+LightProgram* programs[] = { new ChasingWhiteRedBlue(lights),
+                             new ChasingMultiColors(lights) };
+
+int numPrograms = sizeof(programs) / sizeof(LightProgram*);
+int currentProgram = 0;
+
+unsigned long stepTimeout = 0;
+
+int buttonState = LOW;
+int previousButtonState = LOW;
+
+boolean backlightOn = true;
+unsigned long backlightTimeout = millis() + BACKLIGHT_MILLIS;
 
 void setup() {
+  lcd.begin(16, 2);
+  displayCurrentProgram();
+  pinMode(BUTTON_PIN, INPUT);
+  Serial.begin(9600);
   lights.enumerate();
   programs[0]->Init();
-  //lights.do_test_patterns();
 }
 
 void loop() {
-  delay(programs[0]->Do());
-  delay(300);
+  if (millis() >= stepTimeout) stepTimeout = step();
+  if (millis() >= backlightTimeout && backlightOn) turnBacklightOff();
+  processButton();
+}
+
+unsigned long step() {
+  return millis() + programs[currentProgram]->Do();
+}
+
+void processButton() {  
+  buttonState = digitalRead(BUTTON_PIN);
+  if (buttonState == HIGH && !backlightOn) {
+    turnBacklightOn();
+  } else if (buttonState == HIGH && previousButtonState == LOW) {
+    currentProgram = (currentProgram+1) % numPrograms;
+    programs[currentProgram]->Init();
+    displayCurrentProgram();
+    turnBacklightOn();
+  }
+  previousButtonState = buttonState;
+  delay(1);
+}
+
+void displayCurrentProgram() {
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(programs[currentProgram]->GetName());
+}
+
+void turnBacklightOn() {
+  lcd.setBacklight(ON);
+  backlightOn = true;
+  backlightTimeout = millis() + BACKLIGHT_MILLIS;
+}
+
+void turnBacklightOff() {
+  lcd.setBacklight(OFF);
+  backlightOn = false;
 }
