@@ -22,10 +22,11 @@ LightProgram* programs[] = { new ChasingWhiteRedBlue(lights) };
 
 void setup() {
   lights.enumerate();
+  programs[0]->Init();
   //lights.do_test_patterns();
 }
 
 void loop() {
   delay(programs[0]->Do());
-  delay(1000);
+  delay(300);
 }
