@@ -12,19 +12,14 @@
 #include <Wire.h>
 #include <Adafruit_RGBLCDShield.h>
 
-// Total # of lights on string (usually 50, 48, or 36). Maximum is 63, because
-// the protocol uses 6-bit addressing and bulb #63 is reserved for broadcast
-// messages.
 #define LIGHT_COUNT (50)
 
-// Arduino pin number. Pin 13 will blink the on-board LED.
 #define G35_PIN (9)
-
 #define BUTTON_PIN (7)
 
 #define BACKLIGHT_MILLIS (10000)
-#define ON (0x1)
-#define OFF (0x0)
+#define BACKLIGHT_ON (0x1)
+#define BACKLIGHT_OFF (0x0)
 
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
@@ -47,7 +42,6 @@ void setup() {
   lcd.begin(16, 2);
   displayCurrentProgram();
   pinMode(BUTTON_PIN, INPUT);
-  Serial.begin(9600);
   lights.enumerate();
   programs[0]->Init();
 }
@@ -83,12 +77,12 @@ void displayCurrentProgram() {
 }
 
 void turnBacklightOn() {
-  lcd.setBacklight(ON);
+  lcd.setBacklight(BACKLIGHT_ON);
   backlightOn = true;
   backlightTimeout = millis() + BACKLIGHT_MILLIS;
 }
 
 void turnBacklightOff() {
-  lcd.setBacklight(OFF);
+  lcd.setBacklight(BACKLIGHT_OFF);
   backlightOn = false;
 }
