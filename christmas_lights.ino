@@ -24,8 +24,12 @@
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
 G35String lights(G35_PIN, LIGHT_COUNT);
-LightProgram* programs[] = { new ChasingWhiteRedBlue(lights),
-                             new ChasingMultiColors(lights) };
+LightProgram* programs[] = { new SteadyWhite(lights),
+                             new ChasingWhiteRedBlue(lights),
+                             new ChasingMultiColors(lights),
+                             new ChasingRainbow(lights),
+                             new FadeInFadeOutSolidColors(lights)
+                           };
 
 int numPrograms = sizeof(programs) / sizeof(LightProgram*);
 int currentProgram = 0;
