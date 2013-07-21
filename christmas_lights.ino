@@ -76,25 +76,13 @@ void processButton() {
 
 void displayCurrentProgram() {
   char programName[40];
-  strcpy(programName, programs[currentProgram]->GetName());
-  char* token = strtok(programName, " ");
-  String firstLine = parseLine(token);
-  String secondLine = parseLine(token);
-//  while (firstLine.length() + strlen(token) <= 16) {
-//    firstLine += String(token);
-//    if (firstLine.length() < 16) firstLine += " ";
-//    token = strtok(NULL, " ");
-//  }
-//  while (secondLine.length() + strlen(token) <= 16) {
-//    secondLine += String(token);
-//    if (secondLine.length() < 16) secondLine += " ";
-//    token = strtok(NULL, " ");
-//  }
+//  strcpy(programName, programs[currentProgram]->GetName());
+  char* token = strtok(strcpy(programName, programs[currentProgram]->GetName()), " ");
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print(firstLine);
+  lcd.print(parseLine(token));
   lcd.setCursor(0,1);
-  lcd.print(secondLine);
+  lcd.print(parseLine(token));
 }
 
 void turnBacklightOn() {
@@ -108,7 +96,7 @@ void turnBacklightOff() {
   backlightOn = false;
 }
 
-String parseLine(char* token) {
+String parseLine(char*& token) {
   String line = "";
   while (line.length() + strlen(token) <= 16) {
     line += String(token);
