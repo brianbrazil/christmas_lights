@@ -76,7 +76,6 @@ void processButton() {
 
 void displayCurrentProgram() {
   char programName[40];
-//  strcpy(programName, programs[currentProgram]->GetName());
   char* token = strtok(strcpy(programName, programs[currentProgram]->GetName()), " ");
   lcd.clear();
   lcd.setCursor(0,0);
