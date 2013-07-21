@@ -75,9 +75,24 @@ void processButton() {
 }
 
 void displayCurrentProgram() {
+  String firstLine = "", secondLine = "";
+  char* programName = programs[currentProgram]->GetName();
+  char* token = strtok(programName, " ");
+  while (firstLine.length() + strlen(token) <= 16) {
+    firstLine += String(token);
+    if (firstLine.length() < 16) firstLine += " ";
+    token = strtok(NULL, " ");
+  }
+  while (secondLine.length() + strlen(token) <= 16) {
+    secondLine += String(token);
+    if (secondLine.length() < 16) secondLine += " ";
+    token = strtok(NULL, " ");
+  }
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print(programs[currentProgram]->GetName());
+  lcd.print(firstLine);
+  lcd.setCursor(1,0);
+  lcd.print(secondLine);
 }
 
 void turnBacklightOn() {
