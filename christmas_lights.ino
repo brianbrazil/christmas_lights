@@ -8,6 +8,10 @@
 
 #include <G35String.h>
 #include <StockPrograms.h>
+#include <Twinkle.h>
+#include <TwinkleClassic.h>
+#include <RedGreenChase.h>
+#include <CandyCaneChase.h>
 
 #include <Wire.h>
 #include <Adafruit_RGBLCDShield.h>
@@ -24,11 +28,15 @@
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
 G35String lights(G35_PIN, LIGHT_COUNT);
-LightProgram* programs[] = { new SteadyWhite(lights),
-                             new ChasingWhiteRedBlue(lights),
+LightProgram* programs[] = { new Twinkle(lights),
+                             new TwinkleClassic(lights),
                              new ChasingMultiColors(lights),
                              new ChasingRainbow(lights),
-                             new FadeInFadeOutSolidColors(lights)
+                             new RedGreenChase(lights),
+                             new CandyCaneChase(lights),
+                             new ChasingWhiteRedBlue(lights),
+                             new FadeInFadeOutSolidColors(lights),
+                             new SteadyWhite(lights)
                            };
 
 int numPrograms = sizeof(programs) / sizeof(LightProgram*);
