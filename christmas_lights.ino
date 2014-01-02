@@ -10,8 +10,10 @@
 #include <StockPrograms.h>
 #include <Twinkle.h>
 #include <TwinkleClassic.h>
+#include <TwinkleRandom.h>
 #include <RedGreenChase.h>
 #include <CandyCaneChase.h>
+#include <TwinklePink.h>
 
 #include <Wire.h>
 #include <Adafruit_RGBLCDShield.h>
@@ -30,11 +32,13 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 G35String lights(G35_PIN, LIGHT_COUNT);
 LightProgram* programs[] = { new Twinkle(lights),
                              new TwinkleClassic(lights),
+                             new TwinkleRandom(lights),
                              new ChasingMultiColors(lights),
                              new ChasingRainbow(lights),
                              new RedGreenChase(lights),
                              new CandyCaneChase(lights),
                              new ChasingWhiteRedBlue(lights),
+                             new TwinklePink(lights),
                              new FadeInFadeOutSolidColors(lights),
                              new SteadyWhite(lights)
                            };
